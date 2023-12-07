@@ -6,7 +6,7 @@ def sum_natural_numbers(n):
 
 def natural_numbers_sum_even(n):
     if n == 1:
-        return 1
+        return 2
     else:
         return 2*n + natural_numbers_sum_even(n-1)
 
