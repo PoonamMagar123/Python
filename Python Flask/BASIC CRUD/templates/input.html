@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Input Data {% endblock %}
+
+{% block header %} Add New Data {% endblock %}
+{% block body%}
+    <a href="{{ url_for('index')}}" class="btn btn-primary">Back Home</a>
+    <div class="card-body">
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
