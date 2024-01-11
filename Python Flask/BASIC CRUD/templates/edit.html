@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %} Input Data {% endblock %}
+{% block title %} Edit Data {% endblock %}
 
-{% block header %} Add New Data {% endblock %}
+{% block header %} Edit Data {% endblock %}
 
 {% block body %}
     <a href="{{ url_for('index')}}" class="btn btn-primary">Back Home</a>
     <div class="card-body">
-        <form action="{{ url_for('input_data')}}" method="POST">
-            
+        <form action="{{ url_for('process_edit')}}" method="POST">
+            <input type="hidden" name="id" value="{{ data.id }}">
             <div class="form-group">
                 <label for="name">Name</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">#</div>
                     </div>
-                    <input type="text" id="name" class="form-control" placeholder="Input Name" name="name">
+                    <input type="text" id="name" class="form-control" placeholder="Input Name" name="name" value="{{data.name}}">
                 </div>
             </div>
             <div class="form-group">
@@ -24,7 +24,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">#</div>
                     </div>
-                    <input type="email" id="email" class="form-control" placeholder="Input Email" name="email">
+                    <input type="email" id="email" class="form-control" placeholder="Input Email" name="email" value="{{data.email}}">
                 </div>
             </div>
             <div class="form-group">
@@ -33,7 +33,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">#</div>
                     </div>
-                    <input type="tel" id="tel" class="form-control" placeholder="Input Tel" name="mobile">
+                    <input type="tel" id="tel" class="form-control" placeholder="Input Tel" name="mobile" value="{{data.mobile}}">
                 </div>
             </div>
             <div class="form-group">
@@ -42,7 +42,7 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">#</div>
                     </div>
-                    <textarea name="address" id="address" class="form-control" cols="30" rows="5" placeholder="Input Address"></textarea>
+                    <textarea name="address" id="address" class="form-control" cols="30" rows="5" placeholder="Input Address">{{data.address}}</textarea>
                 </div>
             </div>
             <div class="form-group">
