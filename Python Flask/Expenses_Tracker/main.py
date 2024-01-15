@@ -3,7 +3,7 @@ import sqlite3
 class Database:
     def __init__(self, db):
         self.conn = sqlite3.connect(db)
-        self.cur = self.conn.curser()
+        self.cur = self.conn.cursor()
         self.cur.execute(
             "CREATE TABLE IF NOT EXISTS expense_record (item_name text, item_price float, purchase_date date)")
         self.conn.commit()
