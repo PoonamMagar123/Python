@@ -1,53 +1,32 @@
-# import modules 
-from tkinter import *
-from tkinter import ttk
-import datetime as dt
-from main import *
-from tkinter import messagebox
+import sqlite3
+
+class Database:
+    def __init__(self, db):
+        self.conn = sqlite3.connect(db)
+        self.cur = self.conn.cursor()
+        self.cur.execute(
+            "CREATE TABLE IF NOT EXISTS expense_record (item_name text, item_price float, purchase_date date)")
+        self.conn.commit()
+    
+    def fetchRecord(self, query):
+        self.cur.execute(query)
+        rows = self.cur.fetchall()
+        return rows
+    
+    def insertRecord(self, item_name, item_price, purchase_date):
+
+        self.cur.execute("INSERT INTO expense_record VALUES (?,?,?)", (item_name, item_price, purchase_date))
+        self.conn.commit()
+
+    def removeRecord(self, rwid):
+        self.cur.execute("DELETE FROM expense_record WHERE rowid=?", (rwid,))
+        self.conn.commit()
 
 
-# object for Database
-data = Database(db='myexpense.db')
+    def updateRecord(self, item_name, item_price, purchase_date, rwid):
+            self.cur.execute("UPDATE expense_record SET item_name = ?, item_price = ?, purchase_date = ? WHERE rowid = ?",
+                            (item_name, item_price, purchase_date, rwid))
+            self.conn.commit()
 
-# global variables
-count = 0
-selected_rowid = 0
-
-def saveRecord():
-    global data
-    data.insertRecord(item_name=item_name.get(), item_price=item_amt.get(), purchase_date=purchase_date.get())
-
-def setData():
-    date = dt.datetime.now()
-    dopvar.set(f'{date:%d %B %Y}')
-
-def clearEntries():
-    item_name.delete(0, 'end')
-    item_amt.delete(0, 'end')
-    transction_date.delete(0, 'end')
-
-def fetch_records():
-    f = data.fetchRecord('select rowid, * from expense_record')
-    global count
-    for rec in f:
-        tv.insert(parent='',index='0', iid=count, values=(rec[0],rec[1], rec[2], rec[3]))
-        count +=1 
-        tv.after(400, refreshData)
-
-def select_record(event):
-    global selected_rowid
-    selected = tv.focus()
-    val = tv.item(selected, 'values')
-
-    try:
-        selected_rowid = val[0]
-        d = val[3]
-        namevar.set(val[1])
-        amtvar.set(val[2])
-        dopvar.set(val[d])
-    except Exception as ep:
-        pass
-
-# create tkinter obkect
-ws = Tk()
-ws.title('Daily Expenses')
+    def __del__(self):
+        self.conn.close()
