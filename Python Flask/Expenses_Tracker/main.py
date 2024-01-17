@@ -15,8 +15,9 @@ selected_rowid = 0
 def saveRecord():
     global data
     data.insertRecord(item_name=item_name.get(), item_price=item_amt.get(), purchase_date=transaction_date.get())
-
+    fetch_records()
     messagebox.showinfo("Success", f"saved successfully...!")
+    clearEntries()
     
 def setDate():
     date = dt.datetime.now()
@@ -29,7 +30,6 @@ def clearEntries():
 
 def fetch_records():
     f = data.fetchRecord('select rowid, * from expense_record')
-    print(f)
 
     global count
     # Clear existing data in the Treeview
@@ -45,10 +45,9 @@ def select_record(event):
 
     try:
         selected_rowid = val[0]
-        d = val[3]
         namevar.set(val[1])
         amtvar.set(val[2])
-        dopvar.set(val[d])
+        dopvar.set(val[3])
     except Exception as ep:
         pass
 
@@ -70,13 +69,10 @@ def update_record():
         # Update the grid with the new values
         tv.item(selected, values=updated_values)
 
-        # Clear Entry boxes
-        item_name.delete(0, 'END')
-        item_amt.delete(0, 'END')
-        transaction_date.delete(0, 'END')
-
         # Fetch and refresh the data
         fetch_records()
+        messagebox.showinfo("Success", f"Updated successfully...!")
+        clearEntries()
 
     except Exception as ep:
         messagebox.showerror('Error', ep)
@@ -87,14 +83,14 @@ def totalBalance():
         for j in i:
             messagebox.showinfo('Current Balance: ', f"Total Expense: ' {j}\n Balance Remaining: {5000 - j}")
 
-# def refreshData():
-#     for item in tv.get_children():
-#         tv.delete(item)
-#     fetch_records()
-
 def refreshData():
-    tv.delete(*tv.get_children())
+    for item in tv.get_children():
+        tv.delete(item)
     fetch_records()
+
+# def refreshData():
+#     tv.delete(*tv.get_children())
+#     fetch_records()
 
 def deleteRow():
     global selected_rowid
@@ -205,12 +201,6 @@ del_btn = Button(
     font = f
 )
 
-# total_spent = Button(
-#     f1,
-#     text='Total Spent',
-#     font=f,
-#     command = lambda:data.fetchRecord('select sum(ite)')
-# )
 # grid placement
 cur_date.grid(row=3, column=1, sticky=EW, padx=(10, 0))
 submit_btn.grid(row=0, column=2, sticky=EW, padx=(10, 0))
